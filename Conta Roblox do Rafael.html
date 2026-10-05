@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conta Roblox do Rafael</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@1.0.2/dist/basecoat.cdn.min.css">
+  <style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Complements basecoat; artifacts override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: 28px; font-weight: 650; line-height: 1.1; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: #0a8f3c; }
+.kpi .kpi-delta.down { color: #cf3131; }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+</style>
+  
+  <style>
+    :root {
+      --accent: #8b5cf6;
+      --accent-neon: #a855f7;
+      --cyan-neon: #06b6d4;
+      --yt-red: #ef4444;
+      --card-bg: rgba(22, 27, 34, 0.85);
+      --card-border: rgba(139, 92, 246, 0.25);
+      --font-display: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: #0d1117;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.18) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+      color: #e6edf3;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3, .brand-font {
+      font-family: var(--font-display);
+      letter-spacing: -0.02em;
+    }
+
+    .gamer-header {
+      padding: 1.25rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(13, 17, 23, 0.7);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f0f6fc;
+      text-decoration: none;
+    }
+
+    .cube-logo {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+      font-size: 0.85rem;
+      transform: rotate(-5deg);
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .hero-glow-title {
+      text-align: center;
+      padding: 2.5rem 1rem 1.5rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 9999px;
+      background: rgba(139, 92, 246, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      margin-bottom: 1rem;
+    }
+
+    .main-title {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ffffff 40%, #c4b5fd 80%, #67e8f9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 10px rgba(139, 92, 246, 0.35));
+    }
+
+    .main-subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      color: #94a3b8;
+      font-weight: 500;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .main-subtitle strong {
+      color: #38bdf8;
+    }
+
+    .profile-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6), 0 0 25px rgba(139, 92, 246, 0.12);
+      backdrop-filter: blur(16px);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(168, 85, 247, 0.5);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 35px rgba(168, 85, 247, 0.2);
+    }
+
+    .card-glow-accent {
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .avatar-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .avatar-wrapper {
+        flex-direction: row;
+        text-align: left;
+      }
+    }
+
+    .roblox-avatar-box {
+      width: 108px;
+      height: 108px;
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 60%, #15803d 100%);
+      border: 3px solid #4ade80;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 0 30px rgba(34, 197, 94, 0.55), 0 0 14px rgba(34, 197, 94, 0.35), inset 0 2px 6px rgba(255, 255, 255, 0.3);
+      flex-shrink: 0;
+    }
+
+    .avatar-letter {
+      font-family: var(--font-display);
+      font-size: 3.25rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      user-select: none;
+    }
+
+    .avatar-badge-sub {
+      position: absolute;
+      bottom: -6px;
+      background: #0b1320;
+      color: #4ade80;
+      border: 1.5px solid #22c55e;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .display-name-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    @media (min-width: 640px) {
+      .display-name-row {
+        justify-content: flex-start;
+      }
+    }
+
+    .display-name {
+      font-size: clamp(1.4rem, 3vw, 1.85rem);
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+    }
+
+    .verified-icon {
+      color: #38bdf8;
+      font-size: 1.1rem;
+      title: "Verificado";
+    }
+
+    .profile-role-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(139, 92, 246, 0.15);
+      border-radius: 8px;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      font-size: 0.85rem;
+      color: #c4b5fd;
+      font-weight: 600;
+    }
+
+    .btn-roblox-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      margin-top: 1.75rem;
+      padding: 0.95rem 1.5rem;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      border: 1px solid rgba(168, 85, 247, 0.6);
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-roblox-cta:hover {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.55);
+      color: #ffffff;
+    }
+
+    .btn-roblox-cta:active {
+      transform: translateY(0);
+    }
+
+    /* Sections */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      margin-top: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      padding: 1.75rem;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.25s;
+    }
+
+    .info-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .info-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-icon-bubble {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+    }
+
+    .icon-bubble-purple {
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+    }
+
+    .icon-bubble-red {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin: 0;
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin: 0 0 1rem 0;
+    }
+
+    .card-desc strong {
+      color: #e2e8f0;
+    }
+
+    /* Tag badges for games */
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .game-pill {
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* YouTube Card Exclusive Styling */
+    .yt-card {
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .yt-card:hover {
+      border-color: rgba(239, 68, 68, 0.55);
+      box-shadow: 0 10px 30px -8px rgba(239, 68, 68, 0.15);
+    }
+
+    .yt-badge-highlight {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 0.25rem 0.7rem;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+
+    .btn-yt {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.85rem 1.4rem;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      border: 1px solid rgba(248, 113, 113, 0.5);
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(220, 38, 38, 0.35);
+      transition: all 0.2s ease;
+      margin-top: 1.25rem;
+    }
+
+    .btn-yt:hover {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(239, 68, 68, 0.45);
+      color: #ffffff;
+    }
+
+    .btn-site {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.85rem 1.4rem;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0284c7, #0891b2);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(6, 182, 212, 0.28);
+      transition: all 0.2s ease;
+      margin-top: 0.65rem;
+    }
+
+    .btn-site:hover {
+      background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(6, 182, 212, 0.45);
+      color: #ffffff;
+    }
+
+    .gamer-footer {
+      margin-top: auto;
+      padding: 2.5rem 0 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .gamer-footer a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .gamer-footer a:hover {
+      color: #c084fc;
+    }
+
+    /* Small decorative grid lines */
+    .highlight-glow {
+      color: #a855f7;
+      text-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Gamer Header -->
+  <header class="gamer-header">
+    <div class="shell-container nav-wrapper">
+      <a href="#" class="brand-tag">
+        <span class="cube-logo" aria-hidden="true">🎮</span>
+        <span>Rafael <span style="color: var(--accent-neon);">Gamer</span></span>
+      </a>
+      <div class="badge-status">
+        <span class="status-dot"></span>
+        <span>Perfil Oficial</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell-container shell-fade" style="padding-bottom: 2rem;">
+
+    <!-- Hero Title -->
+    <div class="hero-glow-title">
+      <span class="hero-badge">Perfil de Jogador Roblox</span>
+      <h1 class="main-title">Conta Roblox do Rafael</h1>
+      <p class="main-subtitle">
+        Do mesmo <strong>Rafael do YouTube</strong>
+      </p>
+    </div>
+
+    <!-- Main Roblox Card -->
+    <section class="profile-card" aria-label="Cartão de perfil Roblox">
+      <div class="card-glow-accent"></div>
+      
+      <div class="avatar-wrapper">
+        <div class="roblox-avatar-box" role="img" aria-label="Foto de perfil verde do Rafael com a inicial R">
+          <span class="avatar-letter" aria-hidden="true">R</span>
+          <span class="avatar-badge-sub">ROBLOX</span>
+        </div>
+
+        <div class="profile-info">
+          <div class="display-name-row">
+            <h2 class="display-name">RIP_INDRA0025</h2>
+          </div>
+          <div>
+            <span class="profile-role-tag">@Rafael_SC17</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Action Button -->
+      <a 
+        href="https://www.roblox.com/pt/users/8875891077/profile" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="btn-roblox-cta"
+        aria-label="Abrir perfil oficial do Rafael no Roblox"
+      >
+        <span aria-hidden="true">🎮</span>
+        <span>Acessar Perfil no Roblox</span>
+        <span aria-hidden="true" style="font-size: 0.85em; opacity: 0.8;">↗</span>
+      </a>
+    </section>
+
+    <!-- Secondary Info Cards -->
+    <div class="content-grid">
+      
+      <!-- Seção Sobre -->
+      <section class="info-card" aria-label="Sobre a conta do Rafael">
+        <div class="info-card-header">
+          <div class="info-icon-bubble icon-bubble-purple">
+            <span aria-hidden="true">🎮</span>
+          </div>
+          <h2 class="card-title">Sobre a Conta</h2>
+        </div>
+        <p class="card-desc">
+          Esta é a <strong>conta Roblox oficial do Rafael</strong>, o mesmo criador de conteúdo do canal do YouTube! É por aqui que ele entra no metaverso para jogar, se divertir com amigos, explorar novos mapas e viver altas aventuras.
+        </p>
+        <p class="card-desc">
+          Seja testando novos mundos ou upando com os inscritos, a diversão no Roblox está sempre garantida!
+        </p>
+
+        <div class="game-tags">
+          <span class="game-pill">🎲 Aventuras</span>
+          <span class="game-pill">⚔️ RPG & Ação</span>
+          <span class="game-pill">🏆 Mini-games</span>
+          <span class="game-pill">🤝 Jogando com Amigos</span>
+        </div>
+      </section>
+
+      <!-- Seção Também no YouTube -->
+      <section class="info-card yt-card" aria-label="Destaque do canal do YouTube">
+        <div>
+          <span class="yt-badge-highlight">Criador de Conteúdo</span>
+          <div class="info-card-header">
+            <div class="info-icon-bubble icon-bubble-red">
+              <span aria-hidden="true">📺</span>
+            </div>
+            <h2 class="card-title">Também no YouTube</h2>
+          </div>
+          <p class="card-desc">
+            <strong>Do mesmo Rafael do YouTube!</strong> Além de detonar no Roblox, o Rafael também produz e compartilha vídeos na maior plataforma de streaming de vídeos do planeta.
+          </p>
+          <p class="card-desc" style="margin-bottom: 0.5rem;">
+            Acompanhe gameplays, novidades, momentos divertidos e tudo o que rola no canal oficial.
+          </p>
+        </div>
+
+        <a 
+          href="https://www.youtube.com/@rafaelsaraivacabral3408" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-yt"
+          aria-label="Acessar o canal do Rafael no YouTube"
+        >
+          <span aria-hidden="true">▶</span>
+          <span>Acessar o canal do Rafael</span>
+          <span aria-hidden="true" style="font-size: 0.85em; opacity: 0.8;">↗</span>
+        </a>
+
+        <a 
+          href="https://rafinhayt22.github.io" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-site"
+          aria-label="Acessar o site do Rafael"
+        >
+          <span aria-hidden="true">🌐</span>
+          <span>Acessar meu site</span>
+          <span aria-hidden="true" style="font-size: 0.85em; opacity: 0.8;">↗</span>
+        </a>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="gamer-footer">
+    <div class="shell-container">
+      <p style="margin: 0; font-weight: 500;">
+        Página feita para o Rafael • Roblox e YouTube
+      </p>
+      <p style="margin: 0.4rem 0 0 0; font-size: 0.8rem; color: #475569;">
+        Roblox é uma marca registrada da Roblox Corporation. Esta é uma landing page de fã/perfil pessoal.
+      </p>
+    </div>
+  </footer>
+<script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisFmt keeps axis tick labels short (compact notation) so long values
+  // (e.g. full BRL amounts) never clip against the plot edge.
+  function axisFmt(v) {
+    return fmt.num(v, { notation: "compact", maximumFractionDigits: 1 });
+  }
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  function coerceFormat(spec) {
+    if (typeof spec === "function") return spec;
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padL = 46, padB = 30, padT = 12;
+    var svg = frame(el, W, H);
+    var max = maxOf(cfg.values);
+    var n = cfg.values.length;
+    var plotW = W - padL - 12, plotH = H - padT - padB;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: padL, y1: gy, x2: W - 12, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axisFmt((max * g) / 4);
+      svg.appendChild(lbl);
+    }
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (v / max) * plotH);
+      var x = padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: color });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      var tx = svgEl("text", { x: x + bw / 2, y: H - 10, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      tx.textContent = cfg.labels[i];
+      svg.appendChild(tx);
+    });
+  }
+
+  // line(el, {labels:[], values:[], color?, format?}) — single-series line.
+  function line(el, cfg) {
+    var W = 640, H = 280, padL = 46, padB = 30, padT = 12;
+    var svg = frame(el, W, H);
+    var max = maxOf(cfg.values);
+    var n = cfg.values.length;
+    var plotW = W - padL - 16, plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: padL, y1: gy, x2: W - 16, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axisFmt((max * g) / 4);
+      svg.appendChild(lbl);
+    }
+    var pts = cfg.values.map(function (v, i) {
+      var x = padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1));
+      var y = padT + plotH - (v / max) * plotH;
+      return [x, y];
+    });
+    var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+    svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+    pts.forEach(function (p, i) {
+      var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + f(cfg.values[i]);
+      c.appendChild(t);
+      svg.appendChild(c);
+      var tx = svgEl("text", { x: p[0], y: H - 10, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      tx.textContent = cfg.labels[i];
+      svg.appendChild(tx);
+    });
+  }
+
+  // donut(el, {labels:[], values:[], colors?}) — donut with center total.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    var total = cfg.values.reduce(function (a, b) { return a + b; }, 0) || 1;
+    var palette = cfg.colors || [accent(), "#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4"];
+    var a0 = -Math.PI / 2;
+    cfg.values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + fmt.num(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    var center = svgEl("text", { x: cx, y: cy + 5, "text-anchor": "middle", "font-size": 20, "font-weight": 650, fill: "currentColor" });
+    center.textContent = fmt.num(total);
+    svg.appendChild(center);
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+})();
+
+</script>
+</body>
+</html>
